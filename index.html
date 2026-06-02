@@ -445,9 +445,8 @@
     }
 
     .product-art.has-image {
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
+      display: grid;
+      place-items: center;
     }
 
     .product-art.has-image::after {
@@ -455,6 +454,20 @@
       position: absolute;
       inset: 0;
       background: linear-gradient(180deg, transparent 38%, rgba(17, 10, 13, 0.32));
+    }
+
+    .product-img,
+    .detail-img,
+    .bag-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-img {
+      position: relative;
+      z-index: 1;
     }
 
     .jewel {
@@ -660,6 +673,12 @@
       overflow: hidden;
     }
 
+    .detail-visual.has-image {
+      background:
+        linear-gradient(180deg, rgba(17, 10, 13, 0.02), rgba(17, 10, 13, 0.18)),
+        linear-gradient(145deg, rgba(58, 27, 40, 0.96), rgba(14, 9, 13, 0.96));
+    }
+
     .detail-visual .jewel {
       transform: scale(1.45) translateX(-34%);
       transform-origin: center;
@@ -728,9 +747,7 @@
     }
 
     .bag-thumb.has-image {
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
+      background: linear-gradient(145deg, rgba(58, 27, 40, 0.96), rgba(14, 9, 13, 0.96));
     }
 
     .bag-thumb .jewel {
@@ -1109,12 +1126,17 @@
     let toastTimer;
 
     const jewelMarkup = (shape) => `<span class="jewel ${shape || "ring"}" aria-hidden="true"></span>`;
-    const imageStyle = (image) => image ? ` style="background-image: linear-gradient(180deg, transparent 38%, rgba(17, 10, 13, 0.32)), url('${image}')"` : "";
     const imageClass = (image) => image ? " has-image" : "";
+    const productImageMarkup = (product, className) => {
+      if (!product.image) {
+        return jewelMarkup(product.shape);
+      }
+      return `<img class="${className}" src="${product.image}" alt="${product.cn} / ${product.en}" loading="lazy" decoding="async" onerror="this.remove(); this.parentElement.classList.remove('has-image'); this.parentElement.insertAdjacentHTML('beforeend', '${jewelMarkup(product.shape).replace(/'/g, "\\'")}')">`;
+    };
 
     const productCard = (product) => `
       <article class="product-card" data-product="${product.id}" tabindex="0">
-        <div class="product-art${imageClass(product.image)}"${imageStyle(product.image)}>${product.image ? "" : jewelMarkup(product.shape)}</div>
+        <div class="product-art${imageClass(product.image)}">${productImageMarkup(product, "product-img")}</div>
         <div class="product-body">
           <h3 class="product-name">${product.cn}<br><span class="en">${product.en}</span></h3>
           <div class="product-meta">${product.metaCn}<br>${product.metaEn}</div>
@@ -1154,7 +1176,7 @@
     const renderDetail = () => {
       const product = products.find((item) => item.id === state.currentProductId) || products[0];
       document.getElementById("detailContent").innerHTML = `
-        <div class="detail-visual fade-in"${imageStyle(product.image || siteSettings.heroImage)}>${product.image ? "" : jewelMarkup(product.shape)}</div>
+        <div class="detail-visual fade-in${imageClass(product.image)}">${productImageMarkup(product, "detail-img")}</div>
         <div class="detail-panel fade-in">
           <p class="mini-label">${product.metaEn}</p>
           <h1 class="detail-title">${product.cn}<br><span class="en">${product.en}</span></h1>
@@ -1199,7 +1221,7 @@
         const product = products.find((item) => item.id === id);
         return `
           <article class="bag-card fade-in">
-            <div class="bag-thumb${imageClass(product.image)}"${imageStyle(product.image)}>${product.image ? "" : jewelMarkup(product.shape)}</div>
+            <div class="bag-thumb${imageClass(product.image)}">${productImageMarkup(product, "bag-img")}</div>
             <div>
               <h3>${product.cn}<br><span class="en">${product.en}</span></h3>
               <p class="en">${formatter.format(product.price)}</p>
