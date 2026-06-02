@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#110a0d">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <title>Jealin 管理台</title>
+  <style>
+    :root {
+      --bg: #110a0d;
+      --panel: rgba(255, 255, 255, 0.08);
+      --gold: #d8aa4b;
+      --gold-light: #ffe7a0;
+      --ivory: #fff8e8;
+      --muted: rgba(255, 248, 232, 0.7);
+      --line: rgba(255, 231, 160, 0.22);
+      --danger: #ff9c9c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ivory);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 14% 10%, rgba(255, 231, 160, 0.2), transparent 24%),
+        linear-gradient(155deg, #110a0d 0%, #2a111c 52%, #09070a 100%);
+    }
+
+    .admin {
+      width: min(100%, 760px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: max(18px, env(safe-area-inset-top)) 16px 42px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      color: var(--gold-light);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      color: #fff1bd;
+      font-size: 19px;
+    }
+
+    h3 {
+      color: #fff1bd;
+      font-size: 15px;
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .panel {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(14px);
+    }
+
+    .grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 10px;
+      color: var(--ivory);
+      background: rgba(255, 255, 255, 0.075);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+    }
+
+    button,
+    a.button {
+      display: inline-grid;
+      min-height: 42px;
+      place-items: center;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 15px;
+      color: #1d1208;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+      cursor: pointer;
+    }
+
+    .ghost {
+      border: 1px solid var(--line);
+      color: var(--gold-light);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .danger {
+      color: #2a0808;
+      background: linear-gradient(135deg, #ffd0d0, var(--danger));
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .product-editor {
+      display: grid;
+      gap: 12px;
+    }
+
+    .product-box {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .product-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .export-box {
+      min-height: 170px;
+      margin-top: 10px;
+      white-space: pre;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: min(calc(100% - 32px), 360px);
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ivory);
+      text-align: center;
+      background: rgba(17, 10, 13, 0.94);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 12px);
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 560px) {
+      .two {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="admin">
+    <header class="top">
+      <div>
+        <h1>Jealin 管理台</h1>
+        <p class="hint">修改后先保存预览；确认没问题，再导出配置交给上线版本。</p>
+      </div>
+      <a class="button ghost" href="index.html">返回 H5</a>
+    </header>
+
+    <section class="panel">
+      <h2>站点设置</h2>
+      <div class="grid two">
+        <label>WhatsApp 号码，含国家区号
+          <input id="whatsappNumber" placeholder="例如 2348012345678">
+        </label>
+        <label>首页主视觉图片路径
+          <input id="heroImage" placeholder="assets/jealin-hero-jewelry.png">
+        </label>
+      </div>
+      <p class="hint">商品图片建议放进 `assets/products/`，然后在下方填写类似 `assets/products/ring-01.jpg` 的路径。</p>
+    </section>
+
+    <section class="panel">
+      <h2>商品管理</h2>
+      <div class="actions">
+        <button type="button" id="addProduct">新增商品</button>
+        <button class="ghost" type="button" id="resetConfig">恢复默认</button>
+      </div>
+      <div class="product-editor" id="productEditor"></div>
+    </section>
+
+    <section class="panel">
+      <h2>保存与导出</h2>
+      <div class="actions">
+        <button type="button" id="savePreview">保存到本机预览</button>
+        <button class="ghost" type="button" id="exportConfig">生成 data.js 配置</button>
+        <button class="ghost" type="button" id="copyConfig">复制配置</button>
+      </div>
+      <p class="hint">保存到本机预览只影响当前浏览器。真正上线时，把导出的内容替换到 `data.js`。</p>
+      <textarea class="export-box" id="exportBox" spellcheck="false"></textarea>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script>
+    const storageKey = "jealin-config";
+    const categories = window.JEALIN_DEFAULT_CONFIG.categories;
+    const clone = (value) => JSON.parse(JSON.stringify(value));
+    const readStoredConfig = () => {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey) || "null");
+      } catch (error) {
+        localStorage.removeItem(storageKey);
+        return null;
+      }
+    };
+    let config = readStoredConfig() || clone(window.JEALIN_DEFAULT_CONFIG);
+    const editor = document.getElementById("productEditor");
+    const toast = document.getElementById("toast");
+    let toastTimer;
+
+    const showToast = (message) => {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("show");
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    };
+
+    const productTemplate = () => ({
+      id: `product-${Date.now()}`,
+      category: "ring",
+      shape: "ring",
+      image: "",
+      cn: "新商品",
+      en: "New Product",
+      metaCn: "卖点 / 场景",
+      metaEn: "Benefit / Occasion",
+      price: 30000,
+      descCn: "填写中文商品描述。",
+      descEn: "Write the English product description."
+    });
+
+    const bindSettings = () => {
+      document.getElementById("whatsappNumber").value = config.settings.whatsappNumber || "";
+      document.getElementById("heroImage").value = config.settings.heroImage || "";
+    };
+
+    const readSettings = () => {
+      config.settings.whatsappNumber = document.getElementById("whatsappNumber").value.trim();
+      config.settings.heroImage = document.getElementById("heroImage").value.trim() || "assets/jealin-hero-jewelry.png";
+    };
+
+    const renderProducts = () => {
+      editor.innerHTML = config.products.map((product, index) => `
+        <article class="product-box" data-index="${index}">
+          <div class="product-head">
+            <h3>${index + 1}. ${product.cn || product.en || product.id}</h3>
+            <button class="danger" type="button" data-remove="${index}">删除</button>
+          </div>
+          <div class="grid two">
+            <label>商品 ID
+              <input data-field="id" value="${product.id}">
+            </label>
+            <label>分类
+              <select data-field="category">
+                ${categories.filter((item) => item.key !== "all").map((item) => `
+                  <option value="${item.key}" ${item.key === product.category ? "selected" : ""}>${item.cn} / ${item.en}</option>
+                `).join("")}
+              </select>
+            </label>
+            <label>中文名称
+              <input data-field="cn" value="${product.cn}">
+            </label>
+            <label>英文名称
+              <input data-field="en" value="${product.en}">
+            </label>
+            <label>价格 NGN
+              <input data-field="price" type="number" value="${product.price}">
+            </label>
+            <label>商品图片路径
+              <input data-field="image" value="${product.image || ""}" placeholder="assets/products/item.jpg">
+            </label>
+            <label>图形占位类型
+              <select data-field="shape">
+                ${["earrings", "necklace", "bracelet", "ring", "bangle"].map((shape) => `
+                  <option value="${shape}" ${shape === product.shape ? "selected" : ""}>${shape}</option>
+                `).join("")}
+              </select>
+            </label>
+            <label>中文短卖点
+              <input data-field="metaCn" value="${product.metaCn}">
+            </label>
+            <label>英文短卖点
+              <input data-field="metaEn" value="${product.metaEn}">
+            </label>
+          </div>
+          <div class="grid" style="margin-top:10px;">
+            <label>中文详情
+              <textarea data-field="descCn">${product.descCn}</textarea>
+            </label>
+            <label>英文详情
+              <textarea data-field="descEn">${product.descEn}</textarea>
+            </label>
+          </div>
+        </article>
+      `).join("");
+    };
+
+    const readProducts = () => {
+      config.products = [...editor.querySelectorAll(".product-box")].map((box) => {
+        const product = {};
+        box.querySelectorAll("[data-field]").forEach((field) => {
+          const key = field.dataset.field;
+          product[key] = key === "price" ? Number(field.value || 0) : field.value.trim();
+        });
+        return product;
+      });
+    };
+
+    const collectConfig = () => {
+      readSettings();
+      readProducts();
+      return config;
+    };
+
+    const toDataJs = () => `window.JEALIN_DEFAULT_CONFIG = ${JSON.stringify(collectConfig(), null, 2)};`;
+
+    document.getElementById("addProduct").addEventListener("click", () => {
+      collectConfig();
+      config.products.unshift(productTemplate());
+      renderProducts();
+      showToast("已新增商品 / Product added");
+    });
+
+    document.getElementById("resetConfig").addEventListener("click", () => {
+      config = clone(window.JEALIN_DEFAULT_CONFIG);
+      localStorage.removeItem(storageKey);
+      bindSettings();
+      renderProducts();
+      showToast("已恢复默认 / Reset complete");
+    });
+
+    editor.addEventListener("click", (event) => {
+      const remove = event.target.closest("[data-remove]");
+      if (!remove) return;
+      collectConfig();
+      config.products.splice(Number(remove.dataset.remove), 1);
+      renderProducts();
+      showToast("已删除商品 / Product removed");
+    });
+
+    document.getElementById("savePreview").addEventListener("click", () => {
+      localStorage.setItem(storageKey, JSON.stringify(collectConfig()));
+      showToast("已保存，本机预览生效 / Saved for preview");
+    });
+
+    document.getElementById("exportConfig").addEventListener("click", () => {
+      document.getElementById("exportBox").value = toDataJs();
+      showToast("配置已生成 / Config generated");
+    });
+
+    document.getElementById("copyConfig").addEventListener("click", async () => {
+      const box = document.getElementById("exportBox");
+      if (!box.value.trim()) {
+        box.value = toDataJs();
+      }
+      await navigator.clipboard.writeText(box.value);
+      showToast("已复制 / Copied");
+    });
+
+    bindSettings();
+    renderProducts();
+  </script>
+</body>
+</html>
