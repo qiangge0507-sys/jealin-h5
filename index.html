@@ -1127,14 +1127,16 @@
     `;
 
     const renderCategories = () => {
-      const categoryHtml = categories.slice(1).map((item) => `
+      const activeCategoryKeys = new Set(products.map((product) => product.category));
+      const visibleCategories = categories.filter((item) => item.key === "all" || activeCategoryKeys.has(item.key));
+      const categoryHtml = visibleCategories.slice(1).map((item) => `
         <button class="category-pill" type="button" data-filter="${item.key}">
           ${item.cn} / ${item.en}
         </button>
       `).join("");
       document.getElementById("homeCategories").innerHTML = categoryHtml;
 
-      document.getElementById("shopFilters").innerHTML = categories.map((item) => `
+      document.getElementById("shopFilters").innerHTML = visibleCategories.map((item) => `
         <button class="filter-pill ${item.key === state.filter ? "is-active" : ""}" type="button" data-filter="${item.key}">
           ${item.cn} / ${item.en}
         </button>
