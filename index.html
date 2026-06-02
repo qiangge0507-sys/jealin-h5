@@ -1087,15 +1087,7 @@
 
   <script src="data.js"></script>
   <script>
-    const readStoredConfig = () => {
-      try {
-        return JSON.parse(localStorage.getItem("jealin-config") || "null");
-      } catch (error) {
-        localStorage.removeItem("jealin-config");
-        return null;
-      }
-    };
-    const config = readStoredConfig() || window.JEALIN_DEFAULT_CONFIG;
+    const config = window.JEALIN_DEFAULT_CONFIG;
     const siteSettings = config.settings;
     const categories = config.categories;
     const products = config.products;
@@ -1166,7 +1158,7 @@
     };
 
     const renderProducts = () => {
-      document.getElementById("homeProducts").innerHTML = products.slice(0, 4).map(productCard).join("");
+      document.getElementById("homeProducts").innerHTML = products.slice(0, 8).map(productCard).join("");
       const visibleProducts = state.filter === "all"
         ? products
         : products.filter((product) => product.category === state.filter);
