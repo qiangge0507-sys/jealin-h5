@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#110a0d">
-  <meta name="description" content="Jealin is a light luxury jewelry boutique for Lagos, Nigeria, offering studs, necklaces, bracelets, rings and bangles.">
+  <meta name="description" content="Jealin is a light luxury jewelry boutique for Lagos, Nigeria, offering necklaces, bracelets, rings and earrings.">
   <meta property="og:title" content="Jealin | Priceless Beauty">
-  <meta property="og:description" content="Light luxury jewelry curated for Lagos. Shop studs, necklaces, bracelets, rings and bangles.">
+  <meta property="og:description" content="Light luxury jewelry curated for Lagos. Shop necklaces, bracelets, rings and earrings.">
   <meta property="og:image" content="assets/jealin-hero-jewelry.png">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -549,16 +549,6 @@
       box-shadow: inset 0 0 0 2px rgba(255, 241, 183, 0.28);
     }
 
-    .jewel.bangle {
-      left: 50%;
-      top: 32px;
-      width: 88px;
-      height: 88px;
-      border: 9px double var(--gold);
-      border-radius: 50%;
-      transform: translateX(-50%) rotate(14deg);
-    }
-
     .product-body {
       padding: 12px;
     }
@@ -957,7 +947,7 @@
         <h1>Everyday gold, softly luxurious.</h1>
         <div class="hero-copy">
           <p class="cn">为拉各斯的日常与重要时刻甄选耳钉、项链、手链、戒指与手镯。</p>
-          <p class="en">Curated studs, necklaces, bracelets, rings and bangles for everyday Lagos elegance.</p>
+          <p class="en">Curated necklaces, bracelets, rings and earrings for everyday Lagos elegance.</p>
         </div>
         <div class="hero-actions">
           <button class="primary-btn" type="button" data-route="shop">浏览商品 / Shop Now</button>
@@ -984,7 +974,7 @@
           <h2>热门系列</h2>
           <p class="en">Featured collections</p>
         </div>
-        <button class="link-btn" type="button" data-route="shop">查看全部 / All</button>
+        <button class="link-btn" type="button" data-route="shop">进入商店 / Shop</button>
       </div>
 
       <div class="category-row fade-in" id="homeCategories"></div>
@@ -1011,7 +1001,7 @@
             <h3>可叠搭造型<br><span class="en">Easy styling layers</span></h3>
           </div>
           <p class="cn">耳钉、项链、手链、戒指、手镯可自由组合成完整造型。</p>
-          <p class="en">Mix studs, necklaces, bracelets, rings and bangles into a full look.</p>
+          <p class="en">Mix necklaces, bracelets, rings and earrings into a full look.</p>
         </article>
         <article class="feature-card fade-in">
           <div class="feature-top">
@@ -1095,7 +1085,7 @@
 
     const state = {
       route: "home",
-      filter: "all",
+      filter: categories[0]?.key || "necklace",
       currentProductId: products[0].id,
       bag: []
     };
@@ -1142,8 +1132,8 @@
 
     const renderCategories = () => {
       const activeCategoryKeys = new Set(products.map((product) => product.category));
-      const visibleCategories = categories.filter((item) => item.key === "all" || activeCategoryKeys.has(item.key));
-      const categoryHtml = visibleCategories.slice(1).map((item) => `
+      const visibleCategories = categories.filter((item) => activeCategoryKeys.has(item.key));
+      const categoryHtml = visibleCategories.map((item) => `
         <button class="category-pill" type="button" data-filter="${item.key}">
           ${item.cn} / ${item.en}
         </button>
@@ -1158,10 +1148,11 @@
     };
 
     const renderProducts = () => {
-      document.getElementById("homeProducts").innerHTML = products.slice(0, 8).map(productCard).join("");
-      const visibleProducts = state.filter === "all"
-        ? products
-        : products.filter((product) => product.category === state.filter);
+      const featuredProducts = categories
+        .flatMap((category) => products.filter((product) => product.category === category.key).slice(0, 2))
+        .slice(0, 8);
+      document.getElementById("homeProducts").innerHTML = featuredProducts.map(productCard).join("");
+      const visibleProducts = products.filter((product) => product.category === state.filter);
       document.getElementById("shopProducts").innerHTML = visibleProducts.map(productCard).join("");
     };
 
