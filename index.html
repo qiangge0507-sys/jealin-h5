@@ -4,12 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#110a0d">
+  <meta name="application-name" content="Jealin">
+  <meta name="apple-mobile-web-app-title" content="Jealin">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Jealin is a light luxury jewelry boutique for Lagos, Nigeria, offering necklaces, bracelets, rings and earrings.">
   <meta property="og:title" content="Jealin | Priceless Beauty">
   <meta property="og:description" content="Light luxury jewelry curated for Lagos. Shop necklaces, bracelets, rings and earrings.">
   <meta property="og:image" content="assets/jealin-hero-jewelry.png">
   <meta property="og:type" content="website">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
   <title>Jealin | Priceless Beauty</title>
   <style>
     :root {
@@ -1381,6 +1387,12 @@
     renderBag();
     syncBag();
     refreshFadeItems();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>
