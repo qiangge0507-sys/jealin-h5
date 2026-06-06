@@ -1,0 +1,1403 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#110a0d">
+  <meta name="application-name" content="Jealin">
+  <meta name="apple-mobile-web-app-title" content="Jealin">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Jealin is a light luxury jewelry boutique for Lagos, Nigeria, offering necklaces, bracelets, rings and earrings.">
+  <meta property="og:title" content="Jealin | Priceless Beauty">
+  <meta property="og:description" content="Light luxury jewelry curated for Lagos. Shop necklaces, bracelets, rings and earrings.">
+  <meta property="og:image" content="assets/jealin-hero-jewelry.png">
+  <meta property="og:type" content="website">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <title>Jealin | Priceless Beauty</title>
+  <style>
+    :root {
+      --bg: #110a0d;
+      --panel: rgba(255, 255, 255, 0.075);
+      --panel-strong: rgba(255, 255, 255, 0.12);
+      --gold: #d8aa4b;
+      --gold-light: #ffe7a0;
+      --gold-deep: #9d6722;
+      --ivory: #fff8e8;
+      --muted: rgba(255, 248, 232, 0.72);
+      --quiet: rgba(255, 248, 232, 0.52);
+      --line: rgba(255, 231, 160, 0.22);
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100%;
+      margin: 0;
+      color: var(--ivory);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      letter-spacing: 0;
+      background:
+        radial-gradient(circle at 16% 8%, rgba(255, 231, 160, 0.2), transparent 24%),
+        radial-gradient(circle at 85% 0%, rgba(156, 88, 45, 0.24), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(90, 25, 52, 0.38), transparent 44%),
+        linear-gradient(155deg, #110a0d 0%, #2a111c 52%, #09070a 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255, 248, 232, 0.9) 0 1px, transparent 1.6px),
+        radial-gradient(circle, rgba(255, 231, 160, 0.68) 0 1px, transparent 1.6px);
+      background-position: 18px 36px, 82px 118px;
+      background-size: 118px 142px, 168px 188px;
+      opacity: 0.15;
+      animation: starDrift 24s linear infinite;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      position: relative;
+      width: min(100%, 430px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: max(14px, env(safe-area-inset-top)) 16px calc(92px + env(safe-area-inset-bottom));
+      isolation: isolate;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 64px;
+      padding: 8px 0 10px;
+      background: linear-gradient(180deg, rgba(17, 10, 13, 0.96), rgba(17, 10, 13, 0.72) 72%, transparent);
+      backdrop-filter: blur(14px);
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      border: 1px solid rgba(255, 231, 160, 0.62);
+      border-radius: 50%;
+      background: #050505;
+      box-shadow: inset 0 0 18px rgba(255, 231, 160, 0.14), 0 12px 28px rgba(0, 0, 0, 0.24);
+      overflow: hidden;
+    }
+
+    .logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .brand-name {
+      margin: 0;
+      color: var(--gold-light);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .tagline {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .bag-chip {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--gold-light);
+      background: rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+    }
+
+    .bag-chip::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 15px;
+      width: 18px;
+      height: 15px;
+      border: 1.8px solid currentColor;
+      border-top: 0;
+      border-radius: 2px 2px 5px 5px;
+    }
+
+    .bag-chip::after {
+      content: attr(data-count);
+      position: absolute;
+      right: -2px;
+      top: -2px;
+      display: grid;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      place-items: center;
+      border-radius: 999px;
+      color: #1b1006;
+      font-size: 11px;
+      font-weight: 750;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+    }
+
+    .page {
+      display: none;
+      animation: pageIn 360ms ease both;
+    }
+
+    .page.is-active {
+      display: block;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 520px;
+      margin: 4px -16px 18px;
+      padding: 24px 16px 18px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(17, 10, 13, 0.04), rgba(17, 10, 13, 0.82) 78%, #110a0d 100%),
+        var(--hero-image, url("assets/jealin-hero-jewelry.png")) center 56% / cover no-repeat;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 42%;
+      background: linear-gradient(0deg, #110a0d 0%, transparent 100%);
+      z-index: -1;
+    }
+
+    .eyebrow,
+    .mini-label {
+      margin: 0;
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      max-width: 340px;
+      margin: 16px 0 0;
+      color: #fff1bd;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(40px, 11.5vw, 56px);
+      font-weight: 700;
+      line-height: 0.98;
+    }
+
+    .cn,
+    .en {
+      margin: 0;
+    }
+
+    .cn {
+      color: var(--ivory);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .en {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .hero-copy {
+      max-width: 330px;
+      margin-top: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .primary-btn,
+    .ghost-btn,
+    .small-btn {
+      min-height: 46px;
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 180ms ease, filter 180ms ease, border-color 180ms ease;
+    }
+
+    .primary-btn {
+      flex: 1;
+      padding: 0 18px;
+      color: #1d1208;
+      font-size: 15px;
+      font-weight: 750;
+      background: linear-gradient(135deg, #fff1b7 0%, #d8aa4b 52%, #a46c24 100%);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.36), 0 0 26px rgba(216, 170, 75, 0.2);
+    }
+
+    .ghost-btn {
+      padding: 0 16px;
+      border: 1px solid rgba(255, 231, 160, 0.36);
+      color: var(--gold-light);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .small-btn {
+      min-height: 38px;
+      padding: 0 13px;
+      color: #1d1208;
+      font-size: 12px;
+      font-weight: 750;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+    }
+
+    .primary-btn:active,
+    .ghost-btn:active,
+    .small-btn:active,
+    .nav-item:active,
+    .category-pill:active {
+      transform: scale(0.97);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      min-height: 82px;
+      padding: 12px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.075);
+      backdrop-filter: blur(16px);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--gold-light);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 26px 0 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: #fff3ca;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .section-head .en {
+      margin-top: 4px;
+    }
+
+    .link-btn {
+      flex: 0 0 auto;
+      border: 0;
+      color: var(--gold-light);
+      font-size: 12px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .category-row,
+    .filter-row {
+      display: flex;
+      gap: 9px;
+      padding: 2px 0 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .category-row::-webkit-scrollbar,
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-pill,
+    .filter-pill {
+      flex: 0 0 auto;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .category-pill.is-active,
+    .filter-pill.is-active {
+      color: #1d1208;
+      border-color: transparent;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+      font-weight: 750;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .product-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.045));
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 220ms ease, border-color 220ms ease;
+      backdrop-filter: blur(16px);
+    }
+
+    .product-card:hover,
+    .product-card:active {
+      transform: translateY(-4px);
+      border-color: rgba(255, 231, 160, 0.48);
+    }
+
+    .product-art {
+      position: relative;
+      height: 152px;
+      background:
+        radial-gradient(circle at 38% 22%, rgba(255, 248, 232, 0.2), transparent 20%),
+        linear-gradient(145deg, rgba(58, 27, 40, 0.96), rgba(14, 9, 13, 0.96));
+      overflow: hidden;
+    }
+
+    .product-art::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(255, 231, 160, 0.12);
+      border-radius: 8px;
+    }
+
+    .product-art.has-image {
+      display: grid;
+      place-items: center;
+    }
+
+    .product-art.has-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 38%, rgba(17, 10, 13, 0.32));
+    }
+
+    .product-img,
+    .detail-img,
+    .bag-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-img {
+      position: relative;
+      z-index: 1;
+    }
+
+    .jewel {
+      position: absolute;
+      filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.42));
+    }
+
+    .jewel.ring {
+      left: 50%;
+      top: 39px;
+      width: 74px;
+      height: 74px;
+      border: 11px solid var(--gold);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: inset 0 0 0 2px rgba(255, 241, 183, 0.38), 0 0 24px rgba(216, 170, 75, 0.18);
+    }
+
+    .jewel.earrings {
+      left: 50%;
+      top: 42px;
+      width: 86px;
+      height: 54px;
+      transform: translateX(-50%);
+    }
+
+    .jewel.earrings::before,
+    .jewel.earrings::after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 36% 26%, #fff8df 0 10%, transparent 13%),
+        linear-gradient(145deg, #fff1b7, #d8aa4b 58%, #9d6722);
+    }
+
+    .jewel.earrings::before {
+      left: 0;
+    }
+
+    .jewel.earrings::after {
+      right: 0;
+    }
+
+    .jewel.necklace {
+      left: 50%;
+      top: 24px;
+      width: 108px;
+      height: 104px;
+      border: 3px solid rgba(255, 231, 160, 0.7);
+      border-top-color: transparent;
+      border-radius: 50%;
+      transform: translateX(-50%);
+    }
+
+    .jewel.necklace::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 6px;
+      width: 24px;
+      height: 34px;
+      border-radius: 50% 50% 54% 54%;
+      background: linear-gradient(145deg, #fff1b7, #d8aa4b 58%, #9d6722);
+      transform: translateX(-50%);
+    }
+
+    .jewel.bracelet {
+      left: 50%;
+      top: 48px;
+      width: 96px;
+      height: 58px;
+      border: 8px solid var(--gold);
+      border-radius: 50%;
+      transform: translateX(-50%) rotate(-10deg);
+      box-shadow: inset 0 0 0 2px rgba(255, 241, 183, 0.28);
+    }
+
+    .product-body {
+      padding: 12px;
+    }
+
+    .product-name {
+      margin: 0;
+      color: #fff3ca;
+      font-size: 14px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .product-meta {
+      margin-top: 5px;
+      color: var(--quiet);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 11px;
+      color: var(--gold-light);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .plus-btn {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: #1d1208;
+      font-size: 20px;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+      cursor: pointer;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature-card,
+    .info-card,
+    .bag-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .feature-card {
+      padding: 16px;
+    }
+
+    .feature-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .feature-icon {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: #1d1208;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+    }
+
+    .feature-card h3,
+    .info-card h3,
+    .bag-card h3 {
+      margin: 0;
+      color: #fff3ca;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .shop-hero {
+      padding: 18px 0 8px;
+    }
+
+    .shop-hero h1,
+    .detail-title {
+      margin-top: 10px;
+      font-size: 34px;
+      line-height: 1.05;
+    }
+
+    .detail-visual {
+      position: relative;
+      height: 310px;
+      margin: 14px 0 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(17, 10, 13, 0.02), rgba(17, 10, 13, 0.7)),
+        var(--hero-image, url("assets/jealin-hero-jewelry.png")) center / cover no-repeat;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .detail-visual.has-image {
+      background:
+        linear-gradient(180deg, rgba(17, 10, 13, 0.02), rgba(17, 10, 13, 0.18)),
+        linear-gradient(145deg, rgba(58, 27, 40, 0.96), rgba(14, 9, 13, 0.96));
+    }
+
+    .detail-visual .jewel {
+      transform: scale(1.45) translateX(-34%);
+      transform-origin: center;
+    }
+
+    .detail-panel,
+    .checkout-panel {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .detail-price {
+      margin: 12px 0;
+      color: var(--gold-light);
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .option {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+    }
+
+    .option.is-active {
+      color: #1d1208;
+      border-color: transparent;
+      font-weight: 750;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+    }
+
+    .bag-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .bag-card {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .bag-thumb {
+      position: relative;
+      height: 72px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, rgba(58, 27, 40, 0.96), rgba(14, 9, 13, 0.96));
+      overflow: hidden;
+    }
+
+    .bag-thumb.has-image {
+      background: linear-gradient(145deg, rgba(58, 27, 40, 0.96), rgba(14, 9, 13, 0.96));
+    }
+
+    .bag-thumb .jewel {
+      transform: scale(0.64) translateX(-78%);
+      transform-origin: center;
+    }
+
+    .qty {
+      color: var(--gold-light);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .checkout-panel {
+      margin-top: 16px;
+    }
+
+    .checkout-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 10px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .checkout-row strong {
+      color: var(--gold-light);
+      font-size: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .field {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 13px;
+      color: var(--ivory);
+      background: rgba(255, 255, 255, 0.07);
+      outline: none;
+    }
+
+    .field::placeholder {
+      color: var(--quiet);
+    }
+
+    .about-cover {
+      min-height: 220px;
+      margin: 12px 0 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(17, 10, 13, 0.08), rgba(17, 10, 13, 0.7)),
+        var(--hero-image, url("assets/jealin-hero-jewelry.png")) center / cover no-repeat;
+      box-shadow: var(--shadow);
+    }
+
+    .info-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .info-card {
+      padding: 16px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      z-index: 30;
+      display: grid;
+      width: min(calc(100% - 24px), 410px);
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 8px;
+      border: 1px solid rgba(255, 231, 160, 0.2);
+      border-radius: 999px;
+      background: rgba(17, 10, 13, 0.86);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.42);
+      backdrop-filter: blur(20px);
+      transform: translateX(-50%);
+    }
+
+    .nav-item {
+      display: grid;
+      min-height: 44px;
+      place-items: center;
+      border: 0;
+      border-radius: 999px;
+      color: var(--quiet);
+      font-size: 11px;
+      line-height: 1.15;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .nav-item.is-active {
+      color: #1d1208;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff1b7, #d8aa4b);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(86px + env(safe-area-inset-bottom));
+      z-index: 40;
+      width: min(calc(100% - 32px), 360px);
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ivory);
+      font-size: 13px;
+      text-align: center;
+      background: rgba(17, 10, 13, 0.92);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 12px);
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+      transition: opacity 720ms ease, transform 720ms ease;
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .fade-in.is-visible {
+      opacity: 1;
+      transform: translate3d(0, var(--parallax, 0px), 0);
+    }
+
+    @keyframes starDrift {
+      from {
+        background-position: 18px 36px, 82px 118px;
+      }
+      to {
+        background-position: 18px -142px, 82px -70px;
+      }
+    }
+
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 390px) {
+      .app {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .hero {
+        margin-left: -18px;
+        margin-right: -18px;
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <div class="logo" aria-label="Jealin Logo">
+        <img src="assets/brand/jealin-logo-mark.jpg" alt="Jealin">
+      </div>
+      <div class="brand">
+        <p class="brand-name">Jealin</p>
+        <p class="tagline">Priceless beauty</p>
+      </div>
+      <button class="bag-chip" type="button" data-route="bag" data-count="0" aria-label="购物袋"></button>
+    </header>
+
+    <section class="page is-active" id="homePage" data-page="home">
+      <div class="hero fade-in">
+        <p class="eyebrow">Lagos jewelry boutique</p>
+        <h1>Everyday gold, softly luxurious.</h1>
+        <div class="hero-copy">
+          <p class="cn">为拉各斯的日常与重要时刻甄选项链、手链、戒指与耳钉。</p>
+          <p class="en">Curated necklaces, bracelets, rings and earrings for everyday Lagos elegance.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="primary-btn" type="button" data-route="shop">浏览商品 / Shop Now</button>
+          <button class="ghost-btn" type="button" data-route="about">品牌故事 / About</button>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <strong>5</strong>
+            <span>饰品品类<br>jewelry categories</span>
+          </div>
+          <div class="stat">
+            <strong>24h</strong>
+            <span>预约响应<br>booking response</span>
+          </div>
+          <div class="stat">
+            <strong>LG</strong>
+            <span>拉各斯服务<br>Lagos service</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head fade-in">
+        <div>
+          <h2>热门系列</h2>
+          <p class="en">Featured collections</p>
+        </div>
+        <button class="link-btn" type="button" data-route="shop">进入商店 / Shop</button>
+      </div>
+
+      <div class="category-row fade-in" id="homeCategories"></div>
+      <div class="product-grid fade-in" id="homeProducts"></div>
+
+      <div class="section-head fade-in">
+        <div>
+          <h2>核心优势</h2>
+          <p class="en">Why choose Jealin</p>
+        </div>
+      </div>
+      <div class="feature-list">
+        <article class="feature-card fade-in">
+          <div class="feature-top">
+            <span class="feature-icon">01</span>
+            <h3>轻奢金色质感<br><span class="en">Soft luxury gold finish</span></h3>
+          </div>
+          <p class="cn">适合通勤、约会、晚宴与送礼，低调但有存在感。</p>
+          <p class="en">Designed for work, dates, dinners and gifting with a refined glow.</p>
+        </article>
+        <article class="feature-card fade-in">
+          <div class="feature-top">
+            <span class="feature-icon">02</span>
+            <h3>可叠搭造型<br><span class="en">Easy styling layers</span></h3>
+          </div>
+          <p class="cn">项链、手链、戒指与耳钉可自由组合成完整造型。</p>
+          <p class="en">Mix necklaces, bracelets, rings and earrings into a full look.</p>
+        </article>
+        <article class="feature-card fade-in">
+          <div class="feature-top">
+            <span class="feature-icon">03</span>
+            <h3>拉各斯本地预约<br><span class="en">Local Lagos booking</span></h3>
+          </div>
+          <p class="cn">支持先咨询再购买，方便确认款式、预算与送礼需求。</p>
+          <p class="en">Book first, then confirm style, budget and gifting details with ease.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="shopPage" data-page="shop">
+      <div class="shop-hero fade-in">
+        <p class="mini-label">Shop by style</p>
+        <h1>饰品商店<br><span class="en">Jewelry store</span></h1>
+        <p class="cn">按品类浏览，挑选适合日常、派对或送礼的 Jealin 饰品。</p>
+        <p class="en">Browse by category and choose pieces for daily styling, events or gifts.</p>
+      </div>
+      <div class="filter-row fade-in" id="shopFilters"></div>
+      <div class="product-grid fade-in" id="shopProducts"></div>
+    </section>
+
+    <section class="page" id="detailPage" data-page="detail">
+      <button class="link-btn fade-in" type="button" data-route="shop">返回商品 / Back to shop</button>
+      <div id="detailContent"></div>
+    </section>
+
+    <section class="page" id="bagPage" data-page="bag">
+      <div class="shop-hero fade-in">
+        <p class="mini-label">Reservation bag</p>
+        <h1>预约清单<br><span class="en">Your selection</span></h1>
+        <p class="cn">这里会汇总你想咨询或购买的饰品，提交后可通过 WhatsApp 继续确认。</p>
+        <p class="en">Your selected pieces are gathered here for WhatsApp booking and purchase confirmation.</p>
+      </div>
+      <div id="bagContent"></div>
+    </section>
+
+    <section class="page" id="aboutPage" data-page="about">
+      <div class="shop-hero fade-in">
+        <p class="mini-label">About Jealin</p>
+        <h1>轻奢饰品，为拉各斯而选。<br><span class="en">Soft luxury, curated for Lagos.</span></h1>
+      </div>
+      <div class="about-cover fade-in" aria-hidden="true"></div>
+      <div class="info-stack">
+        <article class="info-card fade-in">
+          <h3>品牌定位<br><span class="en">Brand position</span></h3>
+          <p class="cn">Jealin 面向追求精致但不浮夸的女性，提供金色系轻奢饰品搭配方案。</p>
+          <p class="en">Jealin serves women who want polished, wearable and understated gold jewelry styling.</p>
+        </article>
+        <article class="info-card fade-in">
+          <h3>售卖地点<br><span class="en">Sales location</span></h3>
+          <p class="cn">主要服务尼日利亚拉各斯客户，支持预约咨询、选款建议与购买确认。</p>
+          <p class="en">Focused on Lagos, Nigeria, with booking, styling guidance and purchase confirmation.</p>
+        </article>
+        <article class="info-card fade-in">
+          <h3>适用场景<br><span class="en">Occasions</span></h3>
+          <p class="cn">日常通勤、派对、婚礼客人造型、生日礼物、纪念日礼物。</p>
+          <p class="en">Daily wear, parties, wedding guest styling, birthdays and anniversary gifts.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="主导航">
+    <button class="nav-item is-active" type="button" data-route="home">首页<br>Home</button>
+    <button class="nav-item" type="button" data-route="shop">商品<br>Shop</button>
+    <button class="nav-item" type="button" data-route="bag">预约<br>Bag</button>
+    <button class="nav-item" type="button" data-route="about">品牌<br>About</button>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script>
+    const config = window.JEALIN_DEFAULT_CONFIG;
+    const siteSettings = config.settings;
+    const categories = config.categories;
+    const products = config.products;
+    document.documentElement.style.setProperty("--hero-image", `url("${siteSettings.heroImage}")`);
+
+    const state = {
+      route: "home",
+      filter: categories[0]?.key || "necklace",
+      currentProductId: products[0].id,
+      bag: []
+    };
+
+    const formatter = new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      maximumFractionDigits: 0
+    });
+
+    const pageMap = {
+      home: document.getElementById("homePage"),
+      shop: document.getElementById("shopPage"),
+      detail: document.getElementById("detailPage"),
+      bag: document.getElementById("bagPage"),
+      about: document.getElementById("aboutPage")
+    };
+
+    const toast = document.getElementById("toast");
+    let toastTimer;
+
+    const jewelMarkup = (shape) => `<span class="jewel ${shape || "ring"}" aria-hidden="true"></span>`;
+    const imageClass = (image) => image ? " has-image" : "";
+    const productImageMarkup = (product, className) => {
+      if (!product.image) {
+        return jewelMarkup(product.shape);
+      }
+      return `<img class="${className}" src="${product.image}" alt="${product.cn} / ${product.en}" loading="lazy" decoding="async" onerror="this.remove(); this.parentElement.classList.remove('has-image'); this.parentElement.insertAdjacentHTML('beforeend', '${jewelMarkup(product.shape).replace(/'/g, "\\'")}')">`;
+    };
+
+    const productCard = (product) => `
+      <article class="product-card" data-product="${product.id}" tabindex="0">
+        <div class="product-art${imageClass(product.image)}">${productImageMarkup(product, "product-img")}</div>
+        <div class="product-body">
+          <h3 class="product-name">${product.cn}<br><span class="en">${product.en}</span></h3>
+          <div class="product-meta">${product.metaCn}<br>${product.metaEn}</div>
+          <div class="product-price">
+            <span>${formatter.format(product.price)}</span>
+            <button class="plus-btn" type="button" data-add="${product.id}" aria-label="加入预约清单">+</button>
+          </div>
+        </div>
+      </article>
+    `;
+
+    const renderCategories = () => {
+      const activeCategoryKeys = new Set(products.map((product) => product.category));
+      const visibleCategories = categories.filter((item) => activeCategoryKeys.has(item.key));
+      const categoryHtml = visibleCategories.map((item) => `
+        <button class="category-pill" type="button" data-filter="${item.key}">
+          ${item.cn} / ${item.en}
+        </button>
+      `).join("");
+      document.getElementById("homeCategories").innerHTML = categoryHtml;
+
+      document.getElementById("shopFilters").innerHTML = visibleCategories.map((item) => `
+        <button class="filter-pill ${item.key === state.filter ? "is-active" : ""}" type="button" data-filter="${item.key}">
+          ${item.cn} / ${item.en}
+        </button>
+      `).join("");
+    };
+
+    const renderProducts = () => {
+      const featuredProducts = categories
+        .flatMap((category) => products.filter((product) => product.category === category.key).slice(0, 2))
+        .slice(0, 8);
+      document.getElementById("homeProducts").innerHTML = featuredProducts.map(productCard).join("");
+      const visibleProducts = products.filter((product) => product.category === state.filter);
+      document.getElementById("shopProducts").innerHTML = visibleProducts.map(productCard).join("");
+    };
+
+    const renderDetail = () => {
+      const product = products.find((item) => item.id === state.currentProductId) || products[0];
+      document.getElementById("detailContent").innerHTML = `
+        <div class="detail-visual fade-in${imageClass(product.image)}">${productImageMarkup(product, "detail-img")}</div>
+        <div class="detail-panel fade-in">
+          <p class="mini-label">${product.metaEn}</p>
+          <h1 class="detail-title">${product.cn}<br><span class="en">${product.en}</span></h1>
+          <div class="detail-price">${formatter.format(product.price)}</div>
+          <p class="cn">${product.descCn}</p>
+          <p class="en">${product.descEn}</p>
+          <div class="option-grid" aria-label="颜色选择">
+            <button class="option is-active" type="button">金色<br>Gold</button>
+            <button class="option" type="button">珍珠<br>Pearl</button>
+            <button class="option" type="button">礼盒<br>Gift</button>
+          </div>
+          <button class="primary-btn" type="button" data-add="${product.id}">加入预约清单 / Add to Bag</button>
+        </div>
+      `;
+    };
+
+    const renderBag = () => {
+      const bagContent = document.getElementById("bagContent");
+      const grouped = state.bag.reduce((acc, id) => {
+        acc[id] = (acc[id] || 0) + 1;
+        return acc;
+      }, {});
+      const entries = Object.entries(grouped);
+      const total = state.bag.reduce((sum, id) => {
+        const product = products.find((item) => item.id === id);
+        return sum + (product ? product.price : 0);
+      }, 0);
+
+      if (!entries.length) {
+        bagContent.innerHTML = `
+          <article class="info-card fade-in">
+            <h3>清单还是空的<br><span class="en">Your bag is empty</span></h3>
+            <p class="cn">先去商品页挑选想预约或购买的饰品。</p>
+            <p class="en">Visit the shop and select the pieces you want to book or buy.</p>
+            <button class="primary-btn" type="button" data-route="shop">去挑选 / Start shopping</button>
+          </article>
+        `;
+        return;
+      }
+
+      const list = entries.map(([id, qty]) => {
+        const product = products.find((item) => item.id === id);
+        return `
+          <article class="bag-card fade-in">
+            <div class="bag-thumb${imageClass(product.image)}">${productImageMarkup(product, "bag-img")}</div>
+            <div>
+              <h3>${product.cn}<br><span class="en">${product.en}</span></h3>
+              <p class="en">${formatter.format(product.price)}</p>
+            </div>
+            <div class="qty">x${qty}</div>
+          </article>
+        `;
+      }).join("");
+
+      bagContent.innerHTML = `
+        <div class="bag-list">${list}</div>
+        <div class="checkout-panel fade-in">
+          <div class="checkout-row">
+            <span>商品数量 / Items</span>
+            <strong>${state.bag.length}</strong>
+          </div>
+          <div class="checkout-row">
+            <span>预估合计 / Estimated total</span>
+            <strong>${formatter.format(total)}</strong>
+          </div>
+          <div class="form-grid">
+            <input class="field" id="customerName" placeholder="姓名 / Name">
+            <input class="field" id="customerPhone" placeholder="电话或 WhatsApp / Phone or WhatsApp">
+          </div>
+          <button class="primary-btn" type="button" id="submitBooking" style="width:100%; margin-top: 12px;">立即预约 / Book Now</button>
+        </div>
+      `;
+    };
+
+    const showToast = (message) => {
+      window.clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 1800);
+    };
+
+    const syncBag = () => {
+      document.querySelector(".bag-chip").dataset.count = state.bag.length;
+    };
+
+    const setRoute = (route) => {
+      state.route = route;
+      Object.entries(pageMap).forEach(([key, page]) => {
+        page.classList.toggle("is-active", key === route);
+      });
+      document.querySelectorAll(".nav-item").forEach((item) => {
+        item.classList.toggle("is-active", item.dataset.route === route);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      renderDetail();
+      renderBag();
+      refreshFadeItems();
+    };
+
+    const addToBag = (id) => {
+      state.bag.push(id);
+      syncBag();
+      renderBag();
+      showToast("已加入预约清单 / Added to bag");
+    };
+
+    const openProduct = (id) => {
+      state.currentProductId = id;
+      setRoute("detail");
+    };
+
+    const setFilter = (filter) => {
+      state.filter = filter;
+      renderCategories();
+      renderProducts();
+      setRoute("shop");
+    };
+
+    const submitBooking = () => {
+      const name = document.getElementById("customerName")?.value.trim();
+      const phone = document.getElementById("customerPhone")?.value.trim();
+      const items = state.bag.map((id) => products.find((item) => item.id === id)?.en).filter(Boolean).join(", ");
+      const text = encodeURIComponent(`Hello Jealin, I would like to book/buy: ${items}. Name: ${name || ""}. Phone: ${phone || ""}.`);
+      const whatsapp = siteSettings.whatsappNumber ? siteSettings.whatsappNumber.replace(/\D/g, "") : "";
+      window.location.href = `https://wa.me/${whatsapp}?text=${text}`;
+    };
+
+    document.addEventListener("click", (event) => {
+      const routeButton = event.target.closest("[data-route]");
+      const addButton = event.target.closest("[data-add]");
+      const product = event.target.closest("[data-product]");
+      const filter = event.target.closest("[data-filter]");
+      const submit = event.target.closest("#submitBooking");
+
+      if (addButton) {
+        event.stopPropagation();
+        addToBag(addButton.dataset.add);
+        return;
+      }
+
+      if (routeButton) {
+        setRoute(routeButton.dataset.route);
+        return;
+      }
+
+      if (filter) {
+        setFilter(filter.dataset.filter);
+        return;
+      }
+
+      if (product) {
+        openProduct(product.dataset.product);
+        return;
+      }
+
+      if (submit) {
+        submitBooking();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const product = event.target.closest("[data-product]");
+        if (product) {
+          openProduct(product.dataset.product);
+        }
+      }
+    });
+
+    let fadeItems = [];
+    let revealObserver;
+
+    const refreshFadeItems = () => {
+      if (revealObserver) {
+        revealObserver.disconnect();
+      }
+
+      fadeItems = [...document.querySelectorAll(".page.is-active .fade-in")];
+      revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      }, {
+        threshold: 0.16,
+        rootMargin: "0px 0px -8% 0px"
+      });
+
+      fadeItems.forEach((item) => revealObserver.observe(item));
+      applyParallax();
+    };
+
+    const applyParallax = () => {
+      const viewport = window.innerHeight || 1;
+      fadeItems.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+        const progress = (rect.top - viewport * 0.5) / viewport;
+        const offset = Math.max(-9, Math.min(9, progress * -16));
+        item.style.setProperty("--parallax", `${offset.toFixed(2)}px`);
+      });
+    };
+
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          applyParallax();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+    window.addEventListener("resize", applyParallax);
+
+    renderCategories();
+    renderProducts();
+    renderDetail();
+    renderBag();
+    syncBag();
+    refreshFadeItems();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
