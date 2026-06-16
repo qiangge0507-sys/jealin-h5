@@ -5,6 +5,8 @@ const CORE_ASSETS = [
   "./data.js",
   "./manifest.webmanifest",
   "./assets/favicon.svg",
+  "./assets/brand/jealin-logo-mark.jpg",
+  "./assets/brand/jealin-logo-full.jpg",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   "./assets/jealin-hero-jewelry.png",
